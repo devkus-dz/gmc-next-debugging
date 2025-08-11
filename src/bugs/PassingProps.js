@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Heading, Text, Box, ThumbsRating } from "grommet";
 import { AddCircle, SubtractCircle } from "grommet-icons";
 
@@ -84,7 +84,7 @@ const PilferingPillbug = (props) => {
         level={purchaseLevel}
       />
       {purchaseLevel ? (
-        <PurchaseSummary level={purchaseLevel} liked={likeStatus} />
+        <PurchaseSummary purchaseLevel={purchaseLevel} purchaseLikability={likeStatus} />
       ) : null}
     </>
   );
@@ -198,8 +198,7 @@ function PurchaseSummary({ purchaseLevel, purchaseLikability, ...props }) {
 
 export const bug = {
   title: "Passing Props",
-  subtitle:
-    "this pilfering pillbug can cause confusion and chaos when trying to modify props or state",
+  subtitle: "this pilfering pillbug can cause confusion and chaos when trying to modify props or state",
   name: "Pilfering Pillbug",
   price: "$7.99",
   route: "/bug/pilfering-pillbug",

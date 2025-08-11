@@ -1,90 +1,71 @@
-# Getting Started with the React Bug Shop Demo
+# React Debugging Checkpoint
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/kamranayub/pluralsight-course-react-debugging)
+## Overview
 
-The fastest way to jump into the demo experience and solve the challenges is by running in the GitHub Codespace which is a preconfigured development environment with everything you need to follow along with the course.
+This project was debugged using **React Developer Tools** to inspect the component tree, verify state and props, and identify incorrect behaviors. The following issues were found and resolved.
 
-Once you're in, simply run:
+![eslint warnings](/eslint-warnings.JPG)
 
-    npm start
+### Debugging Steps :
 
-To start the dev server, and Codespaces will prompt you to open a hosted URL in the browser to view the app.
+- Installed React Developer Tools extension and inspect component hierarchy.
 
-Alternatively, you can clone the project locally and configure your own local dev environment.
+- Checked props passing and state values.
 
-## Solving the Challenges
+- Identify incorrect prop naming in different components.
 
-The goal is to catch all the bugs in the shop. Each bug comes with a set of checks you need to make pass. You'll need to refactor and update the code.
+- Verify functionality after bug fixes.
 
-The videos in the course provide the solutions to each challenge but there are often multiple ways to solve a problem with React. If you're stuck, reference the videos or explore on your own!
+## Bug Fixed
 
----
+### 1. `PassingProps.js`
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Issue:**
 
-## Available Scripts
+- Unused useEffect hook import
+- PurchaseSummary component has an incorrect Prop names.
 
-In the project directory, you can run:
+**Fix:**
+1- Removed the unused import useEffect hook.
+2- Ensured that the prop names in the parent matches the one used in the child component `<PurchaseSummary>`.
 
-### `npm start`
+**Before:**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```jsx
+<PurchaseSummary level={purchaseLevel} liked={likeStatus} />
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**After:**
 
-### `npm test`
+```jsx
+<PurchaseSummary
+  purchaseLevel={purchaseLevel}
+  purchaseLikability={likeStatus}
+/>
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 2. `HookSideEffects.js`
 
-### `npm run build`
+**Issue:**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- useCallback was missing a dependency array, causing repeated and unnecessary re-renders.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**Fix:**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Added the dependency array to ensure the side effect runs only when necessary.
 
-### `npm run eject`
+**Before:**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```jsx
+const track = useCallback((analyticsEvent) => {
+  setEventBatch((batch) => [...batch, analyticsEvent]);
+});
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**After:**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```jsx
+const track = useCallback((analyticsEvent) => {
+  setEventBatch((batch) => [...batch, analyticsEvent]);
+}, []);
+```
